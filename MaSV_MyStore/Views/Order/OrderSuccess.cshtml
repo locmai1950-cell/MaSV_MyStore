@@ -1,0 +1,203 @@
+﻿@model MaSV_MyStore.Models.Order
+
+@{
+    ViewBag.Title = "OrderSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>XÁC NHẬN ĐƠN HÀNG</h2>
+<h3>Thông tin đơn hàng</h3>
+<div>
+    <p><strong>Mã đơn hàng:</strong> @Model.OrderID</p>
+    <p><strong>Ngày đặt hàng:</strong> @Model.OrderDate</p>
+    <p><strong>Tổng số tiền:</strong> @Model.TotalAmount</p>
+    <p><strong>Trạng thái thanh toán:</strong> @Model.PaymentStatus</p>
+    <p><strong>Phương thức thanh toán:</strong> @Model.PaymentMethod</p>
+    <p><strong>Phương thức giao hàng:</strong> @Model.ShippingMethod</p>
+    <p><strong>Địa chỉ giao hàng:</strong> @Model.ShippingAddress</p>
+</div>
+
+<h3>Chi tiết đơn hàng</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+            <th>Tổng giá</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderDetails)
+        {
+            <tr>
+                <td>@item.Product.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice</td>
+                <td>@item.TotalPrice</td>
+            </tr>
+        }
+    </tbody>
+</table>
+Các phần code CSS, Giao diện (`.cshtml`) ở Bước 5 và cấu hình `Web.config` ở Bước 6 **chưa được viết** trong đoạn chat này (ở tin nhắn đầu tiên mình mới chỉ xuất code C# cho Models, ViewModels và Controllers). Dưới đây là toàn bộ mã nguồn của các file đó được trích xuất từ bài giảng để bạn dán trực tiếp vào dự án:
+
+**1. File CSS: `Content\myStyle\CustomerHome.css` (Slide 22 - 24)**
+*(Lưu ý: Phần CSS của trang Chi tiết sản phẩm đã được tích hợp trực tiếp trong thẻ `
+<style>
+    ` của file `ProductDetails.cshtml` ở mục 4 bên dưới nên bạn chỉ cần tạo file `CustomerHome.css` này)*.
+
+    ```css
+    /*Style cho phần BANNER*/
+    .banner {
+        background-image: url('../../images/banner.jpg');
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+    }
+
+    .banner-container {
+        text-align: center;
+        color: white;
+    }
+
+        .banner-container h2 {
+            font-size: 2.5rem;
+        }
+
+        .banner-container p {
+            font-size: 2rem;
+        }
+
+    .btnBanner {
+        display: inline-block;
+        padding: 5px 20px;
+        background-color: darkorange;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    /*Style cho phần SEARCH*/
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .search-input {
+        width: 500px;
+        padding: 10px;
+        border: 1px solid #808080;
+        border-radius: 5px 0 0 5px;
+    }
+
+    .search-button {
+        padding: 10px 20px;
+        background-color: brown;
+        border: none;
+        border-radius: 0 5px 5px 0;
+        cursor: pointer;
+    }
+
+        .search-button:hover {
+            background-color: #555;
+        }
+
+    .searchProd {
+        text-align: center;
+    }
+
+    #searchProd h2 {
+        font-size: 2em;
+        margin-bottom: 20px;
+        color: brown;
+    }
+
+    /*Style của FEATURE PRODUCT*/
+    .featureProd {
+        text-align: left;
+    }
+
+    .feature-container {
+        display: flex;
+        overflow-x: auto; /*cho phép cuộn ngang*/
+        scroll-snap-type: x mandatory;
+    }
+
+    .fproduct-item { /*hiển thị dạng slider*/
+        width: 160px; /* điều chỉnh theo độ rộng màn hình */
+        max-height: 400px;
+        margin: 10px;
+        gap: 5px; /*khoảng cách giữa 2 item*/
+        border: 1px groove #808080;
+        border-radius: 10px;
+        flex: 0 0 auto; /*để các sản phẩm không co giãn*/
+        scroll-snap-align: start; /*để các sản phẩm dừng lại ở đầu khi cuộn*/
+    }
+
+        .fproduct-item img {
+            padding: 5px;
+            max-height: 160px;
+            vertical-align: central;
+            background-color: transparent;
+        }
+
+    /*Style của LIST PRODUCT */
+    .listProduct {
+        text-align: left;
+    }
+
+    .list-container {
+        list-style-type: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 20px;
+        padding: 0;
+        margin: 0;
+    }
+
+    .lproduct-item {
+        max-height: 500px;
+        border: 1px groove #808080;
+        border-radius: 10px;
+    }
+
+        .lproduct-item img {
+            padding: 5px;
+            max-height: 120px; /* điều chỉnh theo độ rộng màn hình */
+            background-color: transparent;
+        }
+
+    /*các thuộc tính chung của FEATURE và NEW sản phẩm*/
+    .featureProd h2, .listProduct h2 {
+        font-size: 2em;
+        margin-bottom: 20px;
+        color: brown;
+        text-align: center;
+    }
+
+    .prodPrice {
+        font-size: large;
+        color: blue;
+        font-weight: bolder;
+        padding: 10px 5px 0px 5px;
+    }
+
+    .prodName {
+        color: black;
+        font-weight: bold;
+        padding: 0px 5px 0px 5px;
+    }
+
+    .prodCate {
+        color: black;
+        padding: 0px 5px 0px 5px;
+    }
+
+    .prodSale {
+        font-size: small;
+        color: dimgrey;
+        padding: 0px 5px 0px 5px;
+    }
